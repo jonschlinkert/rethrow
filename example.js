@@ -4,7 +4,7 @@ var fs = require('fs');
 var _ = require('lodash');
 var rethrow = require('./');
 
-function file(fp, data) {
+function render(fp, data) {
   var str = fs.readFileSync(fp, 'utf8');
   var res = '';
   str.split('\n').forEach(function (line, i) {
@@ -17,6 +17,5 @@ function file(fp, data) {
   return res;
 }
 
-// file('test/fixtures/a.tmpl', {});
-
-module.exports = file;
+// render('test/fixtures/a.tmpl', {});
+module.exports = render;
