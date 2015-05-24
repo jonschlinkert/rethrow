@@ -1,0 +1,37 @@
+{
+  "name": "rethrow",
+  "description": "Re-throw an error to get better error reporting for templates.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/rethrow",
+  "author": {
+    "name": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonschlinkert/rethrow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/rethrow/issues"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/jonschlinkert/rethrow/blob/master/LICENSE"
+  },
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "lodash": "^3.9.1",
+    "mocha": "*",
+    "should": "*"
+  },
+  "keywords": []
+}
