@@ -2,7 +2,7 @@
 
 > Re-throw an error to get better error reporting for templates.
 
-Based on [rethrow](https://github.com/jadejs/jade/blob/f2a18826a13d52e4038534043dd78f1c3723fa2c/lib/runtime.js#L202)in Jade.
+Based on [rethrow](https://github.com/jadejs/jade/blob/f2a18826a13d52e4038534043dd78f1c3723fa2c/lib/runtime.js#L202) in Jade.
 
 **Example**
 
@@ -37,6 +37,8 @@ template expression in `filename` at the given `lineno`.
 * `str` **{String}**: Template string
 
 **Example**
+
+This example would only work when simple interpolated variables are used (e.g. not block helpers or other complicated expressions):
 
 ```js
 function rethrow(fp, data) {
