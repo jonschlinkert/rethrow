@@ -7,7 +7,11 @@
 
 'use strict';
 
-var fs = require('fs');
+var align = require('right-align');
+var extend = require('extend-shallow');
+var yellow = require('ansi-yellow');
+var bgred = require('ansi-bgred');
+var red = require('ansi-red');
 
 /**
  * Re-throw the given `err` in context to the offending
@@ -20,34 +24,81 @@ var fs = require('fs');
  * @api public
  */
 
-function rethrow(err, filename, lineno, str) {
-  if (!(err instanceof Error)) throw err;
-  try {
-    str = str || fs.readFileSync(filename, 'utf8');
-  } catch (e) {
-    rethrow(err, null, lineno);
-  }
+function rethrow(options) {
+  var opts = extend({before: 3, after: 3}, options);
+  return function (err, filename, lineno, str, expr) {
+    if (!(err instanceof Error)) throw err;
 
-  lineno += 0;
-  var lines = str.split('\n');
-  var start = Math.max(lineno - 3, 0);
-  var end = Math.min(lines.length, lineno + 3);
+    lineno = lineno >> 0;
+    var lines = str.split('\n');
+    var before = Math.max(lineno - (+opts.before), 0);
+    var after = Math.min(lines.length, lineno + (+opts.after));
 
-  // Error context
-  var context = lines.slice(start, end).map(function (line, i) {
-    var curr = i + start;
-    return (curr == lineno ? '  > ' : '    ')
-      + curr + '| '
-      + line;
-  }).join('\n');
+    // align line numbers
+    var n = align(count(lines.length + 1));
 
-  // Alter exception message
-  err.path = filename;
-  err.message = (filename || 'source') + ':'
-    + lineno + '\n'
-    + context + '\n\n'
-    + err.message;
-  throw err;
+    lineno++;
+    var pointer = errorMessage(err, opts);
+    console.log(pointer)
+
+    // Error context
+    var context = lines.slice(before, after).map(function (line, i) {
+      var num = i + before + 1;
+      var msg = style(num, lineno);
+
+      return msg('  > ', '    ')
+        + n[num] + '| '
+        + line + ' ' + msg(expr, '');
+    }).join('\n');
+
+    // Alter exception message
+    err.path = filename;
+    err.message = (filename || 'source') + ':'
+      + lineno + '\n'
+      + context + '\n\n'
+      + (pointer ? (pointer + yellow(filename)) : styleMessage(err.message, opts)) + '\n';
+
+    throw err.message;
+  };
 }
+
+function style(curr, lineno) {
+  return function(a, b) {
+    return curr == lineno ? bgred(a || '') : (b || '');
+  };
+}
+
+function styleMessage(msg, opts) {
+  if (typeof opts.styleMessage === 'function') {
+    return opts.styleMessage(msg);
+  }
+  return red(msg);
+}
+
+function count(n) {
+  return Array.apply(null, {length: n}).map(Number.call, Number);
+}
+
+function errorMessage(err, opts) {
+  if (opts.pointer === false) return '';
+  var messageRe = /(?:(.+)is not defined|cannot read property)/i, m;
+  var str = '';
+  if (m = messageRe.exec(err.message)) {
+    if (m[1]) {
+      var prop = m[1].trim();
+      str = 'variable `' + prop + '` is not defined';
+    } else if (err.helper) {
+      str = ' helper `' + err.helper.name
+        + '` cannot resolve argument `'
+        + err.helper.args[0] + '`';
+    }
+    str = red('Error: ' + str + ': ');
+  }
+  return str;
+}
+
+/**
+ * Expose `rethrow`
+ */
 
 module.exports = rethrow;
