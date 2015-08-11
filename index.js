@@ -39,7 +39,6 @@ function rethrow(options) {
 
     lineno++;
     var pointer = errorMessage(err, opts);
-    console.log(pointer)
 
     // Error context
     var context = lines.slice(before, after).map(function (line, i) {
@@ -86,7 +85,7 @@ function errorMessage(err, opts) {
   if (m = messageRe.exec(err.message)) {
     if (m[1]) {
       var prop = m[1].trim();
-      str = 'variable `' + prop + '` is not defined';
+      str = 'variable `' + prop + '` is not defined in';
     } else if (err.helper) {
       str = ' helper `' + err.helper.name
         + '` cannot resolve argument `'
