@@ -41,7 +41,7 @@ template expression in `filename` at the given `lineno`.
 ## Related projects
 
 * [assemble](http://assemble.io): Static site generator for Grunt.js, Yeoman and Node.js. Used by Zurb Foundation, Zurb Ink, H5BP/Effeckt,… [more](http://assemble.io)
-* [template-error](https://github.com/jonschlinkert/template-error): Re-throw an.
+* [template-error](https://github.com/jonschlinkert/template-error): Make template errors easy to understand and fix.
 * [template](https://github.com/jonschlinkert/template): Render templates using any engine. Supports, layouts, pages, partials and custom template types. Use template… [more](https://github.com/jonschlinkert/template)
 * [verb](https://github.com/assemble/verb): Documentation generator for GitHub projects. Extremely powerful, easy to use, can generate anything from API… [more](https://github.com/assemble/verb)
 

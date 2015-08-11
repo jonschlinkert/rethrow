@@ -3,14 +3,8 @@
   "description": "Re-throw an error to get better error reporting for templates.",
   "version": "0.2.1",
   "homepage": "https://github.com/jonschlinkert/rethrow",
-  "author": {
-    "name": "Jon Schlinkert",
-    "url": "https://github.com/jonschlinkert"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jonschlinkert/rethrow.git"
-  },
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/rethrow",
   "bugs": {
     "url": "https://github.com/jonschlinkert/rethrow/issues"
   },
