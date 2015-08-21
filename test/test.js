@@ -1,13 +1,16 @@
 'use strict';
 
 /* deps: mocha */
-var rethrow = require('../example');
 require('should');
+var rethrow = require('../')();
+var engine = require('engine')()
 
 describe('rethrow', function () {
-  it('should re-throw an error:', function () {
-    (function () {
-      rethrow('test/fixtures/a.tmpl', {});
-    }).should.match(/> 6| <%= name %>/);
+  it('should re-throw the error string:', function () {
+    try {
+      engine.render('\n\n\n<%= name %>', {});
+    } catch(err) {
+      rethrow(err, 'string', 3, '\n\n\n<%= name %>', {});
+    }
   });
 });

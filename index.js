@@ -7,11 +7,12 @@
 
 'use strict';
 
-var align = require('right-align');
-var extend = require('extend-shallow');
-var yellow = require('ansi-yellow');
-var bgred = require('ansi-bgred');
-var red = require('ansi-red');
+var lazy = require('lazy-cache')(require);
+lazy('right-align', 'align');
+lazy('extend-shallow', 'extend');
+lazy('ansi-yellow', 'yellow');
+lazy('ansi-bgred', 'bgred');
+lazy('ansi-red', 'red');
 
 /**
  * Re-throw the given `err` in context to the offending
@@ -25,7 +26,7 @@ var red = require('ansi-red');
  */
 
 function rethrow(options) {
-  var opts = extend({before: 3, after: 3}, options);
+  var opts = lazy.extend({before: 3, after: 3}, options);
   return function (err, filename, lineno, str, expr) {
     if (!(err instanceof Error)) throw err;
 
@@ -35,7 +36,7 @@ function rethrow(options) {
     var after = Math.min(lines.length, lineno + (+opts.after));
 
     // align line numbers
-    var n = align(count(lines.length + 1));
+    var n = lazy.align(count(lines.length + 1));
 
     lineno++;
     var pointer = errorMessage(err, opts);
@@ -55,7 +56,7 @@ function rethrow(options) {
     err.message = (filename || 'source') + ':'
       + lineno + '\n'
       + context + '\n\n'
-      + (pointer ? (pointer + yellow(filename)) : styleMessage(err.message, opts)) + '\n';
+      + (pointer ? (pointer + lazy.yellow(filename)) : styleMessage(err.message, opts)) + '\n';
 
     throw err.message;
   };
@@ -63,7 +64,7 @@ function rethrow(options) {
 
 function style(curr, lineno) {
   return function(a, b) {
-    return curr == lineno ? bgred(a || '') : (b || '');
+    return curr == lineno ? lazy.bgred(a || '') : (b || '');
   };
 }
 
@@ -71,7 +72,7 @@ function styleMessage(msg, opts) {
   if (typeof opts.styleMessage === 'function') {
     return opts.styleMessage(msg);
   }
-  return red(msg);
+  return lazy.red(msg);
 }
 
 function count(n) {
@@ -91,7 +92,7 @@ function errorMessage(err, opts) {
         + '` cannot resolve argument `'
         + err.helper.args[0] + '`';
     }
-    str = red('Error: ' + str + ': ');
+    str = lazy.red('Error: ' + str + ': ');
   }
   return str;
 }
